@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "ShellSwift",
+        "repositoryURL": "https://github.com/maxchuquimia/ShellSwift",
+        "state": {
+          "branch": "master",
+          "revision": "c439c098f180a97841f03b5304afd37006fe97b0",
+          "version": null
+        }
+      },
+      {
+        "package": "SynchronousRequests",
+        "repositoryURL": "https://github.com/maxchuquimia/synchronousrequests",
+        "state": {
+          "branch": null,
+          "revision": "586e831e3a867674f3c069fb6b3346507f4a6c0d",
+          "version": "0.0.1"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
