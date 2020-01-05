@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		55018FAC23C16AA600A4E473 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55018FAB23C16AA600A4E473 /* main.swift */; };
 		55018FB423C16B0D00A4E473 /* ShellSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 55018FB323C16B0D00A4E473 /* ShellSwift */; };
+		55018FB823C1C0DB00A4E473 /* ocr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55018FB723C1C0DB00A4E473 /* ocr.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -27,6 +28,7 @@
 		55018FA823C16AA600A4E473 /* WordBlitzSolver */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = WordBlitzSolver; sourceTree = BUILT_PRODUCTS_DIR; };
 		55018FAB23C16AA600A4E473 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		55018FB523C16B2700A4E473 /* words.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = words.txt; sourceTree = "<group>"; };
+		55018FB723C1C0DB00A4E473 /* ocr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ocr.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +63,7 @@
 			isa = PBXGroup;
 			children = (
 				55018FAB23C16AA600A4E473 /* main.swift */,
+				55018FB723C1C0DB00A4E473 /* ocr.swift */,
 				55018FB523C16B2700A4E473 /* words.txt */,
 			);
 			path = WordBlitzSolver;
@@ -151,6 +154,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55018FB823C1C0DB00A4E473 /* ocr.swift in Sources */,
 				55018FAC23C16AA600A4E473 /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
