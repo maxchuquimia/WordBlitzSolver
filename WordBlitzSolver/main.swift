@@ -60,10 +60,10 @@ while true {
                         if results.letter.isEmpty {
                             results.letter = ocr(on: cropped, minimumTextHeight: 0.2).letter // try look for bigger letters
 
-                            // It seems Vision has trouble finding I's and Z's 😱
+                            // It seems Vision has trouble finding some letters...
                             if results.letter.isEmpty {
                                 print("Finding even bigger letters")
-                                // Will break everything if this is actually a Z
+                                // Will break everything if this is actually a Z, J or V 🤷‍♀️
                                 results.letter = "I"// ocr(on: cropped, minimumTextHeight: 0.3).letter // try look for bigger letters
                             }
                         }
