@@ -5,8 +5,8 @@
         "package": "ShellSwift",
         "repositoryURL": "https://github.com/maxchuquimia/ShellSwift",
         "state": {
-          "branch": "master",
-          "revision": "c439c098f180a97841f03b5304afd37006fe97b0",
+          "branch": null,
+          "revision": "0df5973430488d7482010c1baaae102de3587db6",
           "version": null
         }
       },

@@ -16,19 +16,21 @@ typealias Loc = (x: Int, y: Int, OCRResult)
 typealias Matrix<T> = [[T]]
 
 NSPasteboard.general.clearContents()
-
-func trim(image: NSImage, rect: CGRect) -> NSImage {
-    let result = NSImage(size: rect.size)
-    result.lockFocus()
-
-    let destRect = CGRect(origin: .zero, size: result.size)
-    image.draw(in: destRect, from: rect, operation: .copy, fraction: 1.0)
-
-    result.unlockFocus()
-    return result
-}
+let imagedir: URL = "/tmp/wordblitzimages"
+try? imagedir | rm(R: true)
+try? FileManager.default.createDirectory(atPath: imagedir.path, withIntermediateDirectories: false, attributes: nil)
 
 var matrix: Matrix<Loc> = []
+var BOARD: NSImage!
+let imageOutputQueue = OperationQueue()
+imageOutputQueue.maxConcurrentOperationCount = 3
+
+let cropMultipliers: Matrix<(CGFloat, CGFloat)> = [
+    [(0.0, 0.75), (0.25, 0.75), (0.50, 0.75), (0.75, 0.75)],
+    [(0.0, 0.50), (0.25, 0.50), (0.50, 0.50), (0.75, 0.50)],
+    [(0.0, 0.25), (0.25, 0.25), (0.50, 0.25), (0.75, 0.25)],
+    [(0.0, 0.00), (0.25, 0.00), (0.50, 0.00), (0.75, 0.00)]
+]
 
 print("Place Quicktime against right side of screen, full height.\nThen, Command+Control+Shift+3.")
 
@@ -39,13 +41,7 @@ while true {
 
         // hardcoded position of 4x4 square on entire screen (y-increase from bottom)
         let image = trim(image: image, rect: CGRect(x: 1231, y: 180, width: 422, height: 422))
-
-        let cropMultipliers: Matrix<(CGFloat, CGFloat)> = [
-            [(0.0, 0.75), (0.25, 0.75), (0.50, 0.75), (0.75, 0.75)],
-            [(0.0, 0.50), (0.25, 0.50), (0.50, 0.50), (0.75, 0.50)],
-            [(0.0, 0.25), (0.25, 0.25), (0.50, 0.25), (0.75, 0.25)],
-            [(0.0, 0.00), (0.25, 0.00), (0.50, 0.00), (0.75, 0.00)]
-        ]
+        BOARD = image
 
         matrix = cropMultipliers
             .enumerated()
@@ -105,77 +101,6 @@ print(matrix.map({ (row) -> String in
     row.map({ $0.2.letter }).joined() + "\n"
 }))
 
-
-func moves(from loc: Loc, in matrix: Matrix<Loc>, excluding locsToExclude: [Loc] = []) -> [Loc] {
-    var moves: [Loc] = []
-    var locsToExclude = locsToExclude
-    locsToExclude.append(loc)
-
-    // Rightwards
-    if loc.x < MATRIX_BOUNDS {
-        var newLoc = loc
-        newLoc.x += 1
-        moves.append(newLoc)
-
-        // Diagonal right up
-        if loc.y > 0 {
-            var newLoc = loc
-            newLoc.x += 1
-            newLoc.y -= 1
-            moves.append(newLoc)
-        }
-
-        // Diagonal right down
-        if loc.y < MATRIX_BOUNDS {
-            var newLoc = loc
-            newLoc.x += 1
-            newLoc.y += 1
-            moves.append(newLoc)
-        }
-    }
-
-    // Leftwards
-    if loc.x > 0 {
-        var newLoc = loc
-        newLoc.x -= 1
-        moves.append(newLoc)
-
-        // Diagonal left up
-        if loc.y > 0 {
-            var newLoc = loc
-            newLoc.x -= 1
-            newLoc.y -= 1
-            moves.append(newLoc)
-        }
-
-        // Diagonal left down
-        if loc.y < MATRIX_BOUNDS {
-            var newLoc = loc
-            newLoc.x -= 1
-            newLoc.y += 1
-            moves.append(newLoc)
-        }
-    }
-
-    // Downwards
-    if loc.y < MATRIX_BOUNDS {
-        var newLoc = loc
-        newLoc.y += 1
-        moves.append(newLoc)
-    }
-
-    // Upwards
-    if loc.y > 0 {
-        var newLoc = loc
-        newLoc.y -= 1
-        moves.append(newLoc)
-    }
-
-    return moves.filter { newLoc in
-        !locsToExclude.contains(where: { $0.x == newLoc.x && $0.y == newLoc.y })
-    }
-}
-
 //print(moves(from: (3, 3), in: matrix))
 
 var OUTPUT: Set<String> = []
@@ -208,15 +133,20 @@ func p(word: String, loc: Loc, trail: [Loc]) {
         if word2.count > 3 && allWords.contains(word2) {
             //print(word2)
 
-            var baseScore = newTrail.map { $0.2.score * letterMultiplier($0.2.multiplier) }.reduce(0, +)
+            var score = newTrail.map { $0.2.score * letterMultiplier($0.2.multiplier) }.reduce(0, +)
 
             newTrail.forEach {
-                baseScore = baseScore * wordMultiplier($0.2.multiplier)
+                score = score * wordMultiplier($0.2.multiplier)
             }
 
             // TODO: Doesn't account for when one version of the word scores more points
             if !OUTPUT.contains(where: { $0.hasSuffix(word2) }) {
-                OUTPUT.insert("\(baseScore) \(word2)")
+                let wordname = "\(String(format: "%04d", score)) \(word2)"
+                OUTPUT.insert(wordname)
+
+                imageOutputQueue.addOperation {
+                    try! annotate(board: BOARD, with: newTrail) | Data.new() > imagedir.appendingPathComponent("\(wordname).png")
+                }
             }
         }
 
@@ -240,7 +170,7 @@ Array(OUTPUT)
     .sorted(by: { $0.localizedStandardCompare($1) == .orderedAscending })
     .forEach { word in
         print(word)
-}
+    }
 
-
-
+// Ensure all the images have finished writing
+imageOutputQueue.waitUntilAllOperationsAreFinished()

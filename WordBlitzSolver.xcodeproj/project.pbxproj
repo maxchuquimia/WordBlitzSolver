@@ -10,6 +10,8 @@
 		55018FAC23C16AA600A4E473 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55018FAB23C16AA600A4E473 /* main.swift */; };
 		55018FB423C16B0D00A4E473 /* ShellSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 55018FB323C16B0D00A4E473 /* ShellSwift */; };
 		55018FB823C1C0DB00A4E473 /* ocr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55018FB723C1C0DB00A4E473 /* ocr.swift */; };
+		557708ED23C2A82C00AF909D /* image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557708EC23C2A82C00AF909D /* image.swift */; };
+		557708EF23C2A86B00AF909D /* moves.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557708EE23C2A86B00AF909D /* moves.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -29,6 +31,8 @@
 		55018FAB23C16AA600A4E473 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		55018FB523C16B2700A4E473 /* words.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = words.txt; sourceTree = "<group>"; };
 		55018FB723C1C0DB00A4E473 /* ocr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ocr.swift; sourceTree = "<group>"; };
+		557708EC23C2A82C00AF909D /* image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = image.swift; sourceTree = "<group>"; };
+		557708EE23C2A86B00AF909D /* moves.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = moves.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +68,8 @@
 			children = (
 				55018FAB23C16AA600A4E473 /* main.swift */,
 				55018FB723C1C0DB00A4E473 /* ocr.swift */,
+				557708EC23C2A82C00AF909D /* image.swift */,
+				557708EE23C2A86B00AF909D /* moves.swift */,
 				55018FB523C16B2700A4E473 /* words.txt */,
 			);
 			path = WordBlitzSolver;
@@ -154,8 +160,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				557708EF23C2A86B00AF909D /* moves.swift in Sources */,
 				55018FB823C1C0DB00A4E473 /* ocr.swift in Sources */,
 				55018FAC23C16AA600A4E473 /* main.swift in Sources */,
+				557708ED23C2A82C00AF909D /* image.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -331,8 +339,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/maxchuquimia/ShellSwift";
 			requirement = {
-				branch = master;
-				kind = branch;
+				kind = revision;
+				revision = 0df5973430488d7482010c1baaae102de3587db6;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
