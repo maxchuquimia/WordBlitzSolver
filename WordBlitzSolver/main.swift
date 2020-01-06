@@ -11,6 +11,7 @@ import Cocoa
 import ShellSwift
 import CoreGraphics
 import Vision
+import AppKit
 
 typealias Loc = (x: Int, y: Int, OCRResult)
 typealias Matrix<T> = [[T]]
@@ -54,7 +55,13 @@ while true {
 
                         let rect = CGRect(x: image.size.width * point.0, y: image.size.height * point.1, width: image.size.width * 0.25 , height: image.size.height * 0.25)
 
-                        let cropped = trim(image: image, rect: rect).cgImage(forProposedRect: nil, context: nil, hints: nil)!
+                        var cropped = trim(image: image, rect: rect)
+
+                        let cgImage = cropped.cgImage(forProposedRect: nil, context: nil, hints: nil)!
+                        let bitmapRep = NSBitmapImageRep(cgImage: cgImage)
+                        let jpegData = bitmapRep.representation(using: NSBitmapImageRep.FileType.jpeg, properties: [:])!
+
+                        cropped = NSImage(data: jpegData)!
                         var results = ocr(on: cropped)
 
                         if results.letter.isEmpty {
