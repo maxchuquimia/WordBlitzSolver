@@ -134,14 +134,23 @@ func p(word: String, loc: Loc, trail: [Loc]) {
             //print(word2)
 
             var score = newTrail.map { $0.2.score * letterMultiplier($0.2.multiplier) }.reduce(0, +)
+            var calculation: String = "("
+            calculation += newTrail.map({ "\($0.2.score)" + (letterMultiplier($0.2.multiplier) > 1 ? "*\(letterMultiplier($0.2.multiplier))" : "") }).joined(separator: " + ")
+            calculation += ")"
+
 
             newTrail.forEach {
                 score = score * wordMultiplier($0.2.multiplier)
+                if wordMultiplier($0.2.multiplier) > 1 {
+                    calculation += "*\(wordMultiplier($0.2.multiplier))"
+                }
             }
+
+            calculation += " = \(score)"
 
             // TODO: Doesn't account for when one version of the word scores more points
             if !OUTPUT.contains(where: { $0.hasSuffix(word2) }) {
-                let wordname = "\(String(format: "%04d", score)) \(word2)"
+                let wordname = "\(String(format: "%04d", score)) \(word2)" + "\t\t\(calculation) - \(word2)"
                 OUTPUT.insert(wordname)
 
                 imageOutputQueue.addOperation {
